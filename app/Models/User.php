@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -42,4 +43,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function subscribers(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            related: User::class,
+            table: Subscription::class,
+            foreignPivotKey: 'target_id',
+            relatedPivotKey: 'subscriber_id',
+        )->using(Subscription::class);
+    }
+
+    public function targets(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            related: User::class,
+            table: Subscription::class,
+            foreignPivotKey: 'subscriber_id',
+            relatedPivotKey: 'target_id',
+        )->using(Subscription::class);
+    }
 }

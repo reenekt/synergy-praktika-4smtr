@@ -11,6 +11,11 @@ defineProps({
         required: false,
         default: false,
     },
+    placeholder: {
+        type: String,
+        required: false,
+        default: null,
+    },
 });
 
 defineEmits(['update:modelValue']);
@@ -27,11 +32,13 @@ defineExpose({ focus: () => input.value.focus() });
 </script>
 
 <template>
-    <input
+    <textarea
         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
         :value="modelValue"
         :disabled="disabled"
         @input="$emit('update:modelValue', $event.target.value)"
         ref="input"
+        rows="3"
+        :placeholder="placeholder"
     />
 </template>
